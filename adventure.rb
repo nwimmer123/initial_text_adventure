@@ -154,10 +154,8 @@ def adventure
 	while check == "repeat"		
 		if result == 1
 			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
-			death
-			return
-			
-			
+			return death
+				
 		elsif result == 2
 			puts "You sneak quietly into the gloom of the cave."
 			puts ""
@@ -188,9 +186,7 @@ def adventure
 						$stats[:dexterity] -= 1
 						if death_check 
 							puts "You colapse to the ground holding your leg. The goblin walks over, knife in hand and a leer on its face. He laughs as he opens your thrat and you feel no more ..."
-							if death
-								return
-							end
+							return death
 						else
 						$stats[:gold] += 1
 						$stats[:xp] += 10
@@ -202,7 +198,8 @@ def adventure
 
 					end
 			else
-			return "You trip on a gnarled root as you clumsily feel your way into the darkness. You fall head long into a pit, impaling yourself on a staligmite."
+			puts "You trip on a gnarled root as you clumsily feel your way into the darkness. You fall head long into a pit, impaling yourself on a staligmite."
+			return death
 			end
 
 		elsif result == 3
@@ -220,10 +217,10 @@ def adventure
 			elsif luck > 0
 				puts "An arrow thunks into your thigh and a searing pain shoots through your body." 
 				puts ""
-					$stats[:vitality] -= 2
-					$stats[:dexterity] -= 1
-					if $stats[:vitality] < 0 || $stats[:dexterity] < 0
-						return "You colapse to the ground holding your leg. A goblin walks over, knife in hand and a leer on its face. He laughs as he opens your throat and you feel no more ..."
+
+					if death_check
+						puts "You colapse to the ground holding your leg. A goblin walks over, knife in hand and a leer on its face. He laughs as he opens your throat and you feel no more ..."
+						return death
 					else
 					$stats[:gold] += 1
 					$stats[:xp] += 10
@@ -257,9 +254,11 @@ def adventure
 			luck = Random.new
 			luck = luck.rand(1..10)
 			if luck > 8
-				return "You return to the tavern with #{$stats[:gold]} gold pieces, vastlt exagerrated tales of your martial prowess and proced to have the best Diamondback run in histroy. You emerge as the wealthiest person around!!"
+				puts "You return to the tavern with #{$stats[:gold]} gold pieces, vastly exagerrated tales of your martial prowess and proced to have the best Diamondback run in histroy. You emerge as the wealthiest person around!!"
+				return death
 			elsif luck > 3
-				return "You return to town, and proced to lose your gold in about 10 minutes. Back to square one"
+				puts "You return to town, and proced to lose your gold in about 10 minutes. Back to square one"
+				return death
 			end
 		elsif result == 2
 			puts "You travel down into the dark tunnel. At least you have a torch."
@@ -271,13 +270,12 @@ def adventure
 		end
 	end
 
-		#death check? inquire if ser wants to play a new game sequence	
+		#death check? inquire if user wants to play a new game sequence	
 		# if death_check 
 		# 	puts Specific Death Sequence
-		# 	if death
-		# 		return
-		# 	end
+		# 	return death
 		# end
+		# 
 
 		# luck check
 		# luck = Random.new
