@@ -91,6 +91,7 @@ def adventure
 	end
 
 	def death
+		puts ""
 		puts "THE END!"
 		puts ""
 		puts "1) If you would like to play again."
@@ -99,9 +100,9 @@ def adventure
 		check = "repeat"
 		while check == "repeat" do
 			if result == 1
-				adventure
+				return adventure
 			elsif result == 2
-				return true
+				return 
 			else 
 				puts "Please make the proper input"
 				check = "repeat"
@@ -152,16 +153,11 @@ def adventure
 
 	while check == "repeat"		
 		if result == 1
-			$stats[:vitality] -= 20
-
-			if death_check 
-				puts "ahhhh you're sossss dead!!!"
-				if death
-					return
-				end
-			end
-			puts 
-			#return "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
+			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
+			death
+			return
+			
+			
 		elsif result == 2
 			puts "You sneak quietly into the gloom of the cave."
 			puts ""
@@ -190,8 +186,11 @@ def adventure
 						puts ""
 						$stats[:vitality] -= 2
 						$stats[:dexterity] -= 1
-						if $stats[:vitality] < 0 || $stats[:dexterity] < 0
-							return "You colapse to the ground holding your leg. The goblin walks over, knife in hand and a leer on its face. He laughs as he opens your thrat and you feel no more ..."
+						if death_check 
+							puts "You colapse to the ground holding your leg. The goblin walks over, knife in hand and a leer on its face. He laughs as he opens your thrat and you feel no more ..."
+							if death
+								return
+							end
 						else
 						$stats[:gold] += 1
 						$stats[:xp] += 10
@@ -272,6 +271,13 @@ def adventure
 		end
 	end
 
+		#death check? inquire if ser wants to play a new game sequence	
+		# if death_check 
+		# 	puts Specific Death Sequence
+		# 	if death
+		# 		return
+		# 	end
+		# end
 
 		# luck check
 		# luck = Random.new
