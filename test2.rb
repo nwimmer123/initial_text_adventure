@@ -1,18 +1,17 @@
-		result = gets.to_i
-		check = "repeat"
-		while check == "repeat" do
-			if result == 1
-				return "It's a one"
-				
-			elsif result == 2
-				return "It's a 2"
-				
-			elsif result == 3
-				return "It's a three"
-				
-			else 
-				puts "Please make the proper input"
-				check = "repeat"
-				result = gets.to_i
-			end
-		end
+
+	
+
+stat = Random.new
+
+goblin = {
+	strength: stat.rand(3..5),
+	intelligence: stat.rand(1..4),
+	dexterity: stat.rand(4..8),
+	vitality: stat.rand(1..3),
+	beauty: stat.rand(1..10),
+	gold: stat.rand(1..3),
+	xp: 10,
+	}
+
+puts goblin
+puts goblin

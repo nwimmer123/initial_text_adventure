@@ -1,3 +1,14 @@
+stat = Random.new
+
+goblin = {
+	strength: stat.rand(3..5),
+	intelligence: stat.rand(1..4),
+	dexterity: stat.rand(4..8),
+	vitality: stat.rand(1..3),
+	beauty: stat.rand(1..2),
+	gold: stat.rand(1..3),
+	xp: 10,
+	}
 
 def stat_generator
 	
@@ -108,17 +119,55 @@ def death
 	end
 end
 
-no_rock_fall_torch = "As you approch the end of the tunnel, you hear sounds ahead. You snub out your torch, wait for your eyes to readjust, and then pear around the corner."
+def combat 
 
 def rock_fall
+
+	luck = [1,2,3,4,5,6,7,8,9,10]
+
 	puts "The commotion of the falling rocks seems to have alerted some goblins. You hear high pitched, excited voices echoing up the tunnel."
 	puts ""
 	puts "Stats reminder #{$stats}"
 	puts ""
+	puts "1) You draw your sword, bellowing your warcry and charge aound the corner to smite your enemies."
+	puts "2) You look around to see if you can find a decent ambush point."
+	puts "3) Yeesh, they sound pissed. It's time to scramble over those rocks and get out of here!"
+	puts "4) There appears to be a little hollow in those fallen rocks, I'm going to try to squeeze in there and hide."
+	result = gets.to_i
+	puts ""
+
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			puts "It's a one"
+			break
+		elsif result == 2
+			puts "It's a 2"
+			break
+		elsif result == 3
+			puts "It's a three"
+			break
+		elsif result == 4
+			puts "It's a three"
+			break	
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
+
 end
 
 def no_rock_fall_torch
-	puts "then pear around the corner."
+
+	luck = [1,2,3,4,5,6,7,8,9,10]
+
+	puts "You go to the end of the tunnel and then peer around the corner."
+	puts ""
+	puts "Stats reminder #{$stats}"
+	puts ""
+
 end
 
 def adventure
@@ -254,7 +303,6 @@ def adventure
 
 	puts "Stats reminder: #{$stats}"
 	puts ""
-
 	puts "You survey the cave and see a tunnel leading down."
 	puts ""
 	puts "1) I've had enough of this. I'm going back to the tavern. I can get back in on a game of Diamondback and win all my money back with 1 gold piece."
@@ -392,6 +440,8 @@ puts adventure
 # if luck > 5
 
 #general structure of choices
+#result = gets.to_i
+#puts ""
 #check = "repeat"
 # while check == "repeat" do
 # 	if result == 1
