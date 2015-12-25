@@ -201,6 +201,31 @@ def run_away(monster, character, luck)
 	end
 end 
 
+def combat(monster, character, luck, enemy_adjective, melee_body_part)
+	puts "The #{enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes."
+	puts ""
+	puts "1) You ready your weapon for battle and attack uttering a yell as you go for an all out assault of fury, throwing caution to the wind."
+ 	puts "2) Best to approach this battle with care. I shall parry it's initial charge and look for an openeing in which to strike."
+	puts "3) Run away!!!!!"
+	result = gets.to_i
+	puts ""
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			return attack(monster, character, enemy_adjective, melee_body_part, luck)
+			
+		elsif result == 2
+			return parry(monster, character, enemy_adjective, melee_body_part, luck)
+		elsif result == 3
+			return run_away(monster, character, luck)
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
+end
+
 def stat_generator
 	
 	stat = Random.new
@@ -231,6 +256,6 @@ end
 
 puts stat_generator
 
-puts run_away(goblin, $stats, luck)
+puts combat(goblin, $stats, luck, enemy_adjective, melee_body_part)
 
 
