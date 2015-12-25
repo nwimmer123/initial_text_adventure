@@ -12,24 +12,6 @@ goblin = {
 	weapon: "short sword"
 	}
 
-def combat(monster, character)
-	puts "player #{$stats}"
-	puts "golin #{monster}"
-	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
-	puts ""
-	luck = [1,2,3,4,5,6,7,8,9,10]
-	luck = Random.new
-	luck = luck.rand(1..10)
-	puts "player luck #{luck}"
-	if (monster[:dexterity] > character[:dexterity] && luck <15)
-		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
-		puts ""
-		character[:vitality] = character[:vitality] - monster[:strength]
-		puts $stats
-
-	end
-
-end
 
 def stat_generator
 	
@@ -142,7 +124,24 @@ def death
 	end
 end
 
-def combat 
+def combat(monster, character)
+	puts "player #{$stats}"
+	puts "golin #{monster}"
+	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
+	puts ""
+	luck = [1,2,3,4,5,6,7,8,9,10]
+	luck = Random.new
+	luck = luck.rand(1..10)
+	puts "player luck #{luck}"
+	if (monster[:dexterity] > character[:dexterity] && luck <15)
+		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
+		puts ""
+		character[:vitality] = character[:vitality] - monster[:strength]
+		puts $stats
+
+	end
+
+end
 
 def rock_fall
 

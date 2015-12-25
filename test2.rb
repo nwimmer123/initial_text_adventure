@@ -12,6 +12,102 @@ goblin = {
 	weapon: "short sword"
 	}
 
+def level_up_check(level)
+
+	if ($stats[:level] == 1 && $stats[:xp] > 50)
+		level_up
+		return
+	elsif ($stats[:level] == 2 && $stats[:xp] > 125)
+		level_up
+		return
+	elsif ($stats[:level] == 3 && $stats[:xp] > 225)
+		level_up
+		return
+	elsif ($stats[:level] == 4 && $stats[:xp] > 375)
+		level_up
+		return
+	end
+end
+
+def level_up
+	check = "repeat"
+	while check == "repeat" do
+		puts "You have leveled up. Vitality increases! Choose another skill to increase."
+		$stats[:level] += 1
+		$stats[:vitality] += 2
+		puts "1) strength"
+		puts "2) intelligence"
+		puts "3) dexterity"
+		puts "4) vitality"
+		puts "5) beauty"
+		check = gets.to_i
+		if check == 1
+			$stats[:strength] += 1
+		elsif check == 2
+			$stats[:intelligence] += 1
+		elsif check == 3
+			$stats[:dexterity] += 1
+		elsif check == 4
+			$stats[:vitality] += 1
+		elsif check == 5
+			$stats[:beauty] += 1
+		else
+			puts "please enter the correct input"
+			check = "repeat"
+		end
+
+	end
+	puts "Here are your new stats! #{$stats}"
+	return		
+end
+
+def death_check
+	if ($stats[:strength] < 1 || $stats[:intelligence] < 1 || $stats[:dexterity] < 1 || $stats[:vitality] < 1 || $stats[:beauty] < 1)
+		return true
+	else
+		return
+	end
+end
+
+def death
+	puts ""
+	puts "THE END!"
+	puts ""
+	puts "1) If you would like to play again."
+	puts "2) If you are done for now."
+	result = gets.to_i
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			#return adventure
+		elsif result == 2
+			return 
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
+end
+
+def monster_death?(monster)
+	if monster[:vitality] < 0
+		puts "With a shiver, the #{monster[:name]} collapses in a heap."
+		return monster_death(monster, $stats)
+	else
+		return
+	end
+end
+
+def monster_death(monster, character)
+	character[:xp] += monster[:xp_value]
+	character[:gold] += monster[:gold]
+	puts "A quick check of the #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
+	puts "stats reminder #{$stats}"
+	level_up_check($stats[:level])
+end
+
+
 def combat(monster, character)
 	puts "player #{$stats}"
 	puts "golin #{monster}"
@@ -21,12 +117,20 @@ def combat(monster, character)
 	luck = Random.new
 	luck = luck.rand(1..10)
 	puts "player luck #{luck}"
-	if (monster[:dexterity] > character[:dexterity] && luck <15)
+	if (monster[:dexterity] > character[:dexterity] && luck < 8)
 		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
 		puts ""
 		character[:vitality] = character[:vitality] - monster[:strength]
 		puts $stats
-
+		if death_check
+			puts "You place a hand to your side, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
+			return death
+		end
+	else 
+		puts "As the #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the sholder."
+		puts ""
+		monster[:vitality] = monster[:vitality] - character[:strength]
+		monster_death?(monster)
 	end
 
 end
@@ -40,7 +144,7 @@ def stat_generator
 	vitality = stat.rand(1..10)
 	beauty = stat.rand(1..10)
 	gold = 0
-	xp = 0 
+	xp = 45 
 
 	puts "Please review your stats. 10 is the max."
 	puts ""
