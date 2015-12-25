@@ -109,7 +109,8 @@ def monster_death(monster, character)
 end
 
 
-def combat(monster, character)
+def attack(monster, character)
+	luck = [1,2,3,4,5,6,7,8,9,10]
 	puts "player #{$stats}"
 	puts "golin #{monster}"
 	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
@@ -187,28 +188,9 @@ def death
 	end
 end
 
-def combat(monster, character)
-	puts "player #{$stats}"
-	puts "golin #{monster}"
-	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
-	puts ""
-	luck = [1,2,3,4,5,6,7,8,9,10]
-	luck = Random.new
-	luck = luck.rand(1..10)
-	puts "player luck #{luck}"
-	if (monster[:dexterity] > character[:dexterity] && luck <15)
-		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
-		puts ""
-		character[:vitality] = character[:vitality] - monster[:strength]
-		puts $stats
 
-	end
-
-end
 
 def rock_fall
-
-	luck = [1,2,3,4,5,6,7,8,9,10]
 
 	puts "The commotion of the falling rocks seems to have alerted some goblins. You hear high pitched, excited voices echoing up the tunnel."
 	puts ""
@@ -219,35 +201,33 @@ def rock_fall
 	puts "3) Yeesh, they sound pissed. It's time to scramble over those rocks and get out of here!"
 	puts "4) There appears to be a little hollow in those fallen rocks, I'm going to try to squeeze in there and hide."
 	
-	# result = gets.to_i
-	# puts ""
+	result = gets.to_i
+	puts ""
 
-	# check = "repeat"
-	# while check == "repeat" do
-	# 	if result == 1
-	# 		puts "It's a one"
-	# 		break
-	# 	elsif result == 2
-	# 		puts "It's a 2"
-	# 		break
-	# 	elsif result == 3
-	# 		puts "It's a three"
-	# 		break
-	# 	elsif result == 4
-	# 		puts "It's a three"
-	# 		break	
-	# 	else 
-	# 		puts "Please make the proper input"
-	# 		check = "repeat"
-	# 		result = gets.to_i
-	# 	end
-	# end
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			puts "There are two goblins charging towards you brandishing #{goblin[:weapon]}'s. The tunnel is narrow though, and they can only approach you one at a time."
+			return goblin_combat_one
+		elsif result == 2
+			puts "It's a 2"
+			break
+		elsif result == 3
+			puts "It's a three"
+			break
+		elsif result == 4
+			puts "It's a three"
+			break	
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
 
 end
 
 def no_rock_fall_torch
-
-	luck = [1,2,3,4,5,6,7,8,9,10]
 
 	puts "You go to the end of the tunnel and then peer around the corner."
 	puts ""
@@ -257,8 +237,6 @@ def no_rock_fall_torch
 end
 
 def adventure
-
-	luck = [1,2,3,4,5,6,7,8,9,10]
 
 	puts "What is your name brave adventurer?"
 	puts ""

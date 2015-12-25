@@ -12,6 +12,10 @@ goblin = {
 	weapon: "short sword"
 	}
 
+enemy_adjective =["smelly", "foul", "warty", "grotesque", "carbuncular", "shrieking", "mangy", "vile", "glum", "slimey", "repugnant", "flatulent"]
+
+melee_body_part =["chest", "abdomen", "arm", "thigh", "face", "gut", "ribs", "armpit", "sholder"]
+
 def level_up_check(level)
 
 	if ($stats[:level] == 1 && $stats[:xp] > 50)
@@ -90,48 +94,62 @@ def death
 	end
 end
 
-def monster_death?(monster)
+def monster_death?(monster, enemy_adjective)
 	if monster[:vitality] < 0
-		puts "With a shiver, the #{monster[:name]} collapses in a heap."
-		return monster_death(monster, $stats)
+		puts "With a shiver, the #{enemy_adjective.sample} #{monster[:name]} collapses in a heap."
+		return monster_death(monster, $stats, enemy_adjective)
 	else
 		return
 	end
 end
 
-def monster_death(monster, character)
+def monster_death(monster, character, enemy_adjective)
 	character[:xp] += monster[:xp_value]
 	character[:gold] += monster[:gold]
-	puts "A quick check of the #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
+	puts "A quick check of the #{enemy_adjective.sample} #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
 	puts ""
 	puts "stats reminder #{$stats}"
 	level_up_check($stats[:level])
 end
 
 
-def combat(monster, character)
+def attack(monster, character, enemy_adjective, melee_body_part)
 	puts "player #{$stats}"
 	puts "golin #{monster}"
-	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
+	puts "The #{enemy_adjective.sample} #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
 	puts ""
 	luck = [1,2,3,4,5,6,7,8,9,10]
 	luck = Random.new
 	luck = luck.rand(1..10)
 	puts "player luck #{luck}"
+	injury = melee_body_part.sample
 	if (monster[:dexterity] > character[:dexterity] && luck < 8)
-		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
+		puts "The #{enemy_adjective.sample} #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your #{injury}."
 		puts ""
 		character[:vitality] = character[:vitality] - monster[:strength]
 		puts $stats
 		if death_check
-			puts "You place a hand to your side, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
+			puts "You place a hand to your #{injury}, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
 			return death
 		end
 	else 
-		puts "As the #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the sholder."
+		puts "As the #{enemy_adjective.sample} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{melee_body_part.sample}."
 		puts ""
 		monster[:vitality] = monster[:vitality] - character[:strength]
-		monster_death?(monster)
+		monster_death?(monster, enemy_adjective)
+	end
+
+end
+
+def parry(monster, character, enemy_adjective, melee_body_part)
+	puts "You raise your sword, meeting the #{enemy_adjective} #{monster[:name]}'s attack with a clash of steel."
+	puts""
+	luck = [1,2,3,4,5,6,7,8,9,10]
+	luck = Random.new
+	luck = luck.rand(1..10)
+	injury = melee_body_part.samle
+	if (monster[:intelligence] > character[:intelligence] && luck < 4)
+		puts "The #{enemy_adjective.smaple} #{monster[:name]}'s #{monster[:weapon]} glances off your sword, grazing your #{injury}"
 	end
 
 end
@@ -166,6 +184,6 @@ end
 
 puts stat_generator
 
-puts combat(goblin, $stats)
+puts attack(goblin, $stats, enemy_adjective, melee_body_part)
 
 
