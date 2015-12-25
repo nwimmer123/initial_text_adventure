@@ -1,10 +1,9 @@
-		#general structure of choices
 		result = gets.to_i
-		while true do
+		check = "repeat"
+		while check == "repeat" do
 			if result == 1
 				return "It's a one"
-	
-			
+				
 			elsif result == 2
 				return "It's a 2"
 				
@@ -13,6 +12,7 @@
 				
 			else 
 				puts "Please make the proper input"
+				check = "repeat"
 				result = gets.to_i
 			end
 		end

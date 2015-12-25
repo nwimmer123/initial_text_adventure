@@ -24,8 +24,8 @@ def adventure
 		beauty: beauty,
 		gold: gold,
 		xp: xp,
-		inventory: [],
-		level: 1
+		level: 1,
+		inventory: []
 		}
 
 		puts $stats
@@ -270,6 +270,55 @@ def adventure
 		end
 	end
 
+	puts "It's very hard to see in this dark tunnel. Would you like to light your torch?"
+	puts ""
+	puts "1) You light the torch."
+	puts "2) You walk carefully into the dim tunnel, felling carefully with your hand."
+	result = gets.to_i
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			puts "Your torch flares to light."
+			luck = Random.new
+			luck = luck.rand(1..10)
+			if luck > 3 && $stats[:intelligence] > 12
+				$stats[:xp] += 5
+				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel."
+				
+			break
+			elsif luck > 7
+				$stats[:xp] += 5
+				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel."
+				break
+			elsif $stats[:dexterity] > 7
+				$stats[:xp] += 5
+				puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed."
+				
+				break
+			else
+				$stats[:vitality] -= 2
+				if death_check
+					puts "Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head."
+					return death
+				end
+			$stats[:xp] += 5
+			puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed."
+			
+			break
+			end
+
+		elsif result == 2
+			return "It's a 2"
+			
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
+
+	puts $stats
+
 		#death check? inquire if user wants to play a new game sequence	
 		# if death_check 
 		# 	puts Specific Death Sequence
@@ -304,5 +353,7 @@ def adventure
 end
 
 puts adventure
+
+puts "Outside of function #{$stats}"
 
 
