@@ -103,6 +103,7 @@ def monster_death(monster, character)
 	character[:xp] += monster[:xp_value]
 	character[:gold] += monster[:gold]
 	puts "A quick check of the #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
+	puts ""
 	puts "stats reminder #{$stats}"
 	level_up_check($stats[:level])
 end
@@ -144,7 +145,7 @@ def stat_generator
 	vitality = stat.rand(1..10)
 	beauty = stat.rand(1..10)
 	gold = 0
-	xp = 45 
+	xp = 0 
 
 	puts "Please review your stats. 10 is the max."
 	puts ""
@@ -160,8 +161,6 @@ def stat_generator
 	level: 1,
 	inventory: []
 	}
-
-	#puts $stats
 	
 end
 

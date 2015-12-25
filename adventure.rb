@@ -12,39 +12,6 @@ goblin = {
 	weapon: "short sword"
 	}
 
-
-def stat_generator
-	
-	stat = Random.new
-	strength = stat.rand(1..10)
-	intelligence = stat.rand(1..10)
-	dexterity = stat.rand(1..10)
-	vitality = stat.rand(1..10)
-	beauty = stat.rand(1..10)
-	gold = 0
-	xp = 0 
-
-	puts "Please review your stats. 10 is the max."
-	puts ""
-
-	$stats = {
-	strength: strength,
-	intelligence: intelligence,
-	dexterity: dexterity,
-	vitality: vitality,
-	beauty: beauty,
-	gold: gold,
-	xp: xp,
-	level: 1,
-	inventory: []
-	}
-
-	puts $stats
-	
-end
-
-puts combat(goblin, $stats)
-
 def level_up_check(level)
 
 	if ($stats[:level] == 1 && $stats[:xp] > 50)
@@ -92,6 +59,102 @@ def level_up
 	end
 	puts "Here are your new stats! #{$stats}"
 	return		
+end
+
+def death_check
+	if ($stats[:strength] < 1 || $stats[:intelligence] < 1 || $stats[:dexterity] < 1 || $stats[:vitality] < 1 || $stats[:beauty] < 1)
+		return true
+	else
+		return
+	end
+end
+
+def death
+	puts ""
+	puts "THE END!"
+	puts ""
+	puts "1) If you would like to play again."
+	puts "2) If you are done for now."
+	result = gets.to_i
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			#return adventure
+		elsif result == 2
+			return 
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
+end
+
+def monster_death?(monster)
+	if monster[:vitality] < 0
+		puts "With a shiver, the #{monster[:name]} collapses in a heap."
+		return monster_death(monster, $stats)
+	else
+		return
+	end
+end
+
+def monster_death(monster, character)
+	character[:xp] += monster[:xp_value]
+	character[:gold] += monster[:gold]
+	puts "A quick check of the #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
+	puts ""
+	puts "stats reminder #{$stats}"
+	level_up_check($stats[:level])
+end
+
+
+def combat(monster, character)
+	puts "player #{$stats}"
+	puts "golin #{monster}"
+	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
+	puts ""
+	luck = [1,2,3,4,5,6,7,8,9,10]
+	luck = Random.new
+	luck = luck.rand(1..10)
+	puts "player luck #{luck}"
+	if (monster[:dexterity] > character[:dexterity] && luck < 8)
+		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
+		puts ""
+		character[:vitality] = character[:vitality] - monster[:strength]
+		puts $stats
+		if death_check
+			puts "You place a hand to your side, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
+			return death
+		end
+	else 
+		puts "As the #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the sholder."
+		puts ""
+		monster[:vitality] = monster[:vitality] - character[:strength]
+		monster_death?(monster)
+	end
+
+end
+
+def stat_generator
+	
+	stat = Random.new
+	$stats = {
+	strength: stat.rand(1..10),
+	intelligence: stat.rand(1..10),
+	dexterity: stat.rand(1..10),
+	vitality: stat.rand(1..10),
+	beauty: stat.rand(1..10),
+	gold: 0,
+	xp: 0,
+	level: 1,
+	inventory: []
+	}
+
+	puts "Please review your stats. 10 is the max."
+	puts ""
+	puts $stats
+	
 end
 
 # checks if character is dead
@@ -155,29 +218,30 @@ def rock_fall
 	puts "2) You look around to see if you can find a decent ambush point."
 	puts "3) Yeesh, they sound pissed. It's time to scramble over those rocks and get out of here!"
 	puts "4) There appears to be a little hollow in those fallen rocks, I'm going to try to squeeze in there and hide."
-	result = gets.to_i
-	puts ""
+	
+	# result = gets.to_i
+	# puts ""
 
-	check = "repeat"
-	while check == "repeat" do
-		if result == 1
-			puts "It's a one"
-			break
-		elsif result == 2
-			puts "It's a 2"
-			break
-		elsif result == 3
-			puts "It's a three"
-			break
-		elsif result == 4
-			puts "It's a three"
-			break	
-		else 
-			puts "Please make the proper input"
-			check = "repeat"
-			result = gets.to_i
-		end
-	end
+	# check = "repeat"
+	# while check == "repeat" do
+	# 	if result == 1
+	# 		puts "It's a one"
+	# 		break
+	# 	elsif result == 2
+	# 		puts "It's a 2"
+	# 		break
+	# 	elsif result == 3
+	# 		puts "It's a three"
+	# 		break
+	# 	elsif result == 4
+	# 		puts "It's a three"
+	# 		break	
+	# 	else 
+	# 		puts "Please make the proper input"
+	# 		check = "repeat"
+	# 		result = gets.to_i
+	# 	end
+	# end
 
 end
 
