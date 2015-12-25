@@ -1,115 +1,117 @@
+
+
+def stat_generator
+	
+	stat = Random.new
+	strength = stat.rand(1..10)
+	intelligence = stat.rand(1..10)
+	dexterity = stat.rand(1..10)
+	vitality = stat.rand(1..10)
+	beauty = stat.rand(1..10)
+	gold = 0
+	xp = 0 
+
+	puts "Please review your stats. 10 is the max."
+	puts ""
+
+	$stats = {
+	strength: strength,
+	intelligence: intelligence,
+	dexterity: dexterity,
+	vitality: vitality,
+	beauty: beauty,
+	gold: gold,
+	xp: xp,
+	level: 1,
+	inventory: []
+	}
+
+	puts $stats
+	
+end
+
+def level_up_check(level)
+
+	if $stats[:level] == 1 && $stats[:xp] > 50
+		level_up
+		return
+	elsif $stats[:level] == 2 && $stats[:xp] > 125
+		level_up
+		return
+	elsif $stats[:level] == 3 && $stats[:xp] > 225
+		level_up
+		return
+	elsif $stats[:level] == 4 && $stats[:xp] > 375
+		level_up
+		return
+	end
+end
+
+def level_up
+	check = "repeat"
+	while check == "repeat" do
+		puts "You have leveled up. Vitality increases! Choose another skill to increase."
+		$stats[:level] += 1
+		$stats[:vitality] += 2
+		puts "1) strength"
+		puts "2) intelligence"
+		puts "3) dexterity"
+		puts "4) vitality"
+		puts "5) beauty"
+		check = gets.to_i
+		if check == 1
+			$stats[:strength] += 1
+		elsif check == 2
+			$stats[:intelligence] += 1
+		elsif check == 3
+			$stats[:dexterity] += 1
+		elsif check == 4
+			$stats[:vitality] += 1
+		elsif check == 5
+			$stats[:beauty] += 1
+		else
+			puts "please enter the correct input"
+			check = "repeat"
+		end
+
+	end
+	puts "Here are your new stats! #{$stats}"
+	return		
+end
+
+# checks if character is dead
+def death_check
+	if $stats[:strength] < 1 || $stats[:intelligence] < 1 || $stats[:dexterity] < 1 || $stats[:vitality] < 1 || $stats[:beauty] < 1 
+		return true
+	else
+		return
+	end
+end
+
+def death
+	puts ""
+	puts "THE END!"
+	puts ""
+	puts "1) If you would like to play again."
+	puts "2) If you are done for now."
+	result = gets.to_i
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			return adventure
+		elsif result == 2
+			return 
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
+		end
+	end
+end
+
 def adventure
 
 	luck = [1,2,3,4,5,6,7,8,9,10]
-
-	def stat_generator
-		
-		stat = Random.new
-		strength = stat.rand(1..10)
-		intelligence = stat.rand(1..10)
-		dexterity = stat.rand(1..10)
-		vitality = stat.rand(1..10)
-		beauty = stat.rand(1..10)
-		gold = 0
-		xp = 0 
-
-		puts "Please review your stats. 10 is the max."
-		puts ""
-	
-		$stats = {
-		strength: strength,
-		intelligence: intelligence,
-		dexterity: dexterity,
-		vitality: vitality,
-		beauty: beauty,
-		gold: gold,
-		xp: xp,
-		level: 1,
-		inventory: []
-		}
-
-		puts $stats
-		
-	end
-
-	def level_up_check(level)
-
-		if $stats[:level] == 1 && $stats[:xp] > 50
-			level_up
-			return
-		elsif $stats[:level] == 2 && $stats[:xp] > 125
-			level_up
-			return
-		elsif $stats[:level] == 3 && $stats[:xp] > 225
-			level_up
-			return
-		elsif $stats[:level] == 4 && $stats[:xp] > 375
-			level_up
-			return
-		end
-	end
-
-	def level_up
-		check = "repeat"
-		while check == "repeat" do
-			puts "You have leveled up. Vitality increases! Choose another skill to increase."
-			$stats[:level] += 1
-			$stats[:vitality] += 2
-			puts "1) strength"
-			puts "2) intelligence"
-			puts "3) dexterity"
-			puts "4) vitality"
-			puts "5) beauty"
-			check = gets.to_i
-			if check == 1
-				$stats[:strength] += 1
-			elsif check == 2
-				$stats[:intelligence] += 1
-			elsif check == 3
-				$stats[:dexterity] += 1
-			elsif check == 4
-				$stats[:vitality] += 1
-			elsif check == 5
-				$stats[:beauty] += 1
-			else
-				puts "please enter the correct input"
-				check = "repeat"
-			end
-
-		end
-		puts "Here are your new stats! #{$stats}"
-		return		
-	end
-
-	# checks if character is dead
-	def death_check
-		if $stats[:strength] < 1 || $stats[:intelligence] < 1 || $stats[:dexterity] < 1 || $stats[:vitality] < 1 || $stats[:beauty] < 1 
-			return true
-		else
-			return
-		end
-	end
-
-	def death
-		puts ""
-		puts "THE END!"
-		puts ""
-		puts "1) If you would like to play again."
-		puts "2) If you are done for now."
-		result = gets.to_i
-		check = "repeat"
-		while check == "repeat" do
-			if result == 1
-				return adventure
-			elsif result == 2
-				return 
-			else 
-				puts "Please make the proper input"
-				check = "repeat"
-				result = gets.to_i
-			end
-		end
-	end
 
 	puts "What is your name brave adventurer?"
 	puts ""
