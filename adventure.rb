@@ -1,14 +1,35 @@
 stat = Random.new
 
 goblin = {
+	name: "goblin",
 	strength: stat.rand(3..5),
 	intelligence: stat.rand(1..4),
 	dexterity: stat.rand(4..8),
 	vitality: stat.rand(1..3),
 	beauty: stat.rand(1..2),
 	gold: stat.rand(1..3),
-	xp: 10,
+	xp_value: 10,
+	weapon: "short sword"
 	}
+
+def combat(monster, character)
+	puts "player #{$stats}"
+	puts "golin #{monster}"
+	puts "The #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
+	puts ""
+	luck = [1,2,3,4,5,6,7,8,9,10]
+	luck = Random.new
+	luck = luck.rand(1..10)
+	puts "player luck #{luck}"
+	if (monster[:dexterity] > character[:dexterity] && luck <15)
+		puts "The #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your side."
+		puts ""
+		character[:vitality] = character[:vitality] - monster[:strength]
+		puts $stats
+
+	end
+
+end
 
 def stat_generator
 	
@@ -40,18 +61,20 @@ def stat_generator
 	
 end
 
+puts combat(goblin, $stats)
+
 def level_up_check(level)
 
-	if $stats[:level] == 1 && $stats[:xp] > 50
+	if ($stats[:level] == 1 && $stats[:xp] > 50)
 		level_up
 		return
-	elsif $stats[:level] == 2 && $stats[:xp] > 125
+	elsif ($stats[:level] == 2 && $stats[:xp] > 125)
 		level_up
 		return
-	elsif $stats[:level] == 3 && $stats[:xp] > 225
+	elsif ($stats[:level] == 3 && $stats[:xp] > 225)
 		level_up
 		return
-	elsif $stats[:level] == 4 && $stats[:xp] > 375
+	elsif ($stats[:level] == 4 && $stats[:xp] > 375)
 		level_up
 		return
 	end
@@ -91,7 +114,7 @@ end
 
 # checks if character is dead
 def death_check
-	if $stats[:strength] < 1 || $stats[:intelligence] < 1 || $stats[:dexterity] < 1 || $stats[:vitality] < 1 || $stats[:beauty] < 1 
+	if ($stats[:strength] < 1 || $stats[:intelligence] < 1 || $stats[:dexterity] < 1 || $stats[:vitality] < 1 || $stats[:beauty] < 1)
 		return true
 	else
 		return
