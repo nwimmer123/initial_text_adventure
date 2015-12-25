@@ -181,9 +181,24 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 end
 
 def run_away(monster, character, luck)
-
+	puts "goblin #{monster}"
+	puts $stats
+	luck = Random.new
+	luck = luck.rand(1..10)
+	puts "luck is #{luck}"
 	puts "Realizing that you are hard pressed you turn and run from the #{monster[:name]}. It takes a swing and half heartedly runs after you. "
-
+	if ((monster[:dexterity] > character[:dexterity]) && luck < 4)
+		damage = character[:vitality] - monster[:strength]
+		if damage < 0
+			damage = 0
+		end
+		character[:vitality] -= damage
+		puts $stats
+		if death_check
+			puts "You feel hard steel sink into your back and you realize that the end is nigh."
+			return death
+		end
+	end
 end 
 
 def stat_generator
@@ -216,6 +231,6 @@ end
 
 puts stat_generator
 
-puts parry(goblin, $stats, enemy_adjective, melee_body_part)
+puts run_away(goblin, $stats, luck)
 
 
