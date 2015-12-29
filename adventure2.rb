@@ -118,14 +118,15 @@ end
 def attack(monster, character, enemy_adjective, melee_body_part, luck)
 	puts "player #{$stats}"
 	puts "golin #{monster}"
-	puts "The #{@enemy_adjective.sample} #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
+	enemy_adjective = @enemy_adjective.sample
+	puts "The #{enemy_adjective} #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
 	puts ""
 	@luck = Random.new
 	@luck = @luck.rand(1..10)
 	puts "player @luck #{@luck}"
-	injury = @melee_body_part.sample
+	injury = melee_body_part.sample
 	if (monster[:dexterity] > character[:dexterity] && @luck < 8)
-		puts "The #{@enemy_adjective.sample} #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your #{injury}."
+		puts "The #{enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your #{injury}."
 		puts ""
 		damage = character[:vitality] - monster[:strength]
 		if damage < 0
@@ -138,24 +139,31 @@ def attack(monster, character, enemy_adjective, melee_body_part, luck)
 			return death
 		end
 	else 
-		puts "As the #{@enemy_adjective.sample} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{@melee_body_part.sample}."
+		puts "As the #{enemy_adjective} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{melee_body_part.sample}."
 		puts ""
 		monster[:vitality] = monster[:vitality] - character[:strength]
 		monster_death?(monster, @enemy_adjective)
+	end
+	puts "monster #{monster[:vitality]}"
+	puts "character #{character[:vitality]}"
+	current_monster = monster
+	if monster[:vitality] > 0 && character[:vitality] > 0
+
+		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
 	end
 
 end
 
 def parry(monster, character, enemy_adjective, melee_body_part, luck)
-	@enemy_adjective = @enemy_adjective.sample
-	puts "You raise your sword, meeting the #{@enemy_adjective} #{monster[:name]}'s attack with a clash of steel."
+	enemy_adjective = @enemy_adjective.sample
+	puts "You raise your sword, meeting the #{enemy_adjective} #{monster[:name]}'s attack with a clash of steel."
 	puts""
 
 	@luck = Random.new
 	@luck = @luck.rand(1..10)
 	injury = @melee_body_part.sample
 	if (monster[:intelligence] > character[:intelligence] && @luck < 4)
-		puts "The #{@enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} glances off your sword, grazing your #{injury}"
+		puts "The #{enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} glances off your sword, grazing your #{injury}"
 		puts ""
 		damage = (character[:vitality] - (monster[:strength]/2))
 		if damage < 0
@@ -168,7 +176,7 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 			return death
 		end
 	else
-		puts "You see an opening in the #{@enemy_adjective} #{monster[:name]}'s guard and you make your move. Scoring a light blow on the #{monster[:name]}'s #{@melee_body_part.sample}"
+		puts "You see an opening in the #{enemy_adjective} #{monster[:name]}'s guard and you make your move. Scoring a light blow on the #{monster[:name]}'s #{melee_body_part.sample}"
 		puts ""
 		enemy_damage = (monster[:vitality] - (character[:strength]/2))
 		if enemy_damage < 0
@@ -176,6 +184,12 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 		end
 		monster[:vitality] -= enemy_damage
 		monster_death?(monster, @enemy_adjective)
+	end
+	puts "monster #{monster[:vitality]}"
+	puts "character #{character[:vitality]}"
+	current_monster = monster
+	if monster[:vitality] > 0 && character[:vitality] > 0
+		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
 	end
 
 end
@@ -202,30 +216,31 @@ def run_away(monster, character, luck)
 end 
 
 def combat(monster, character, luck, enemy_adjective, melee_body_part)
-	while (monster[:vitality] > 0 || character[:vitality > 0]) do
-		puts "The #{@enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes."
-		puts ""
-		puts "1) You ready your weapon for battle and attack uttering a yell as you go for an all out assault of fury, throwing caution to the wind."
-	 	puts "2) Best to approach this battle with care. I shall parry it's initial charge and look for an openeing in which to strike."
-		puts "3) Run away!!!!!"
-		result = gets.to_i
-		puts ""
-		check = "repeat"
-		while check == "repeat" do
-			if result == 1
-				return attack(monster, character, @enemy_adjective, @melee_body_part, @luck)
-				
-			elsif result == 2
-				return parry(monster, character, @enemy_adjective, @melee_body_part, @luck)
-			elsif result == 3
-				return run_away(monster, character, @luck)
-			else 
-				puts "Please make the proper input"
-				check = "repeat"
-				result = gets.to_i
-			end
+	
+	puts "The #{@enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes."
+	puts ""
+	puts "1) You ready your weapon for battle and attack uttering a yell as you go for an all out assault of fury, throwing caution to the wind."
+ 	puts "2) Best to approach this battle with care. I shall parry it's initial charge and look for an openeing in which to strike."
+	puts "3) Run away!!!!!"
+	result = gets.to_i
+	puts ""
+	check = "repeat"
+	while check == "repeat" do
+		if result == 1
+			return attack(monster, character, @enemy_adjective, @melee_body_part, @luck)
+			
+		elsif result == 2
+			return parry(monster, character, @enemy_adjective, @melee_body_part, @luck)
+		elsif result == 3
+			return run_away(monster, character, @luck)
+		else 
+			puts "Please make the proper input"
+			check = "repeat"
+			result = gets.to_i
 		end
 	end
+
+
 end
 
 def stat_generator
@@ -351,8 +366,9 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 
 	while check == "repeat"		
 		if result == 1
-			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
-			return death
+			return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
+			# puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
+			# return death
 				
 		elsif result == 2
 			puts "You sneak quietly into the gloom of the cave."
