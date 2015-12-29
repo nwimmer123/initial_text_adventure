@@ -229,28 +229,21 @@ end
 def stat_generator
 	
 	stat = Random.new
-	strength = stat.rand(1..10)
-	intelligence = stat.rand(1..10)
-	dexterity = stat.rand(1..10)
-	vitality = stat.rand(1..10)
-	beauty = stat.rand(1..10)
-	gold = 0
-	xp = 0 
-
-	puts "Please review your stats. 10 is the max."
-	puts ""
-
 	$stats = {
-	strength: strength,
-	intelligence: intelligence,
-	dexterity: dexterity,
-	vitality: vitality,
-	beauty: beauty,
-	gold: gold,
-	xp: xp,
+	strength: stat.rand(1..10),
+	intelligence: stat.rand(1..10),
+	dexterity: stat.rand(1..10),
+	vitality: stat.rand(1..10),
+	beauty: stat.rand(1..10),
+	gold: 0,
+	xp: 0,
 	level: 1,
 	inventory: []
 	}
+
+	puts "Please review your stats. 10 is the max."
+	puts ""
+	puts $stats
 	
 end
 
