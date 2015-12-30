@@ -155,6 +155,8 @@ def attack(monster, character, enemy_adjective, melee_body_part, luck)
 end
 
 def parry(monster, character, enemy_adjective, melee_body_part, luck)
+	puts "player #{$stats}"
+	puts "golin #{monster}"
 	enemy_adjective = @enemy_adjective.sample
 	puts "You raise your sword, meeting the #{enemy_adjective} #{monster[:name]}'s attack with a clash of steel."
 	puts""
@@ -185,8 +187,8 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 		monster[:vitality] -= enemy_damage
 		monster_death?(monster, @enemy_adjective)
 	end
-	puts "monster #{monster[:vitality]}"
-	puts "character #{character[:vitality]}"
+	puts "player #{$stats}"
+	puts "golin #{monster}"
 	current_monster = monster
 	if monster[:vitality] > 0 && character[:vitality] > 0
 		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
@@ -366,9 +368,9 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 
 	while check == "repeat"		
 		if result == 1
-			return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
-			# puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
-			# return death
+			combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
+			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
+			return death
 				
 		elsif result == 2
 			puts "You sneak quietly into the gloom of the cave."
