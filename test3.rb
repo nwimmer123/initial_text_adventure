@@ -1,14 +1,14 @@
-@test_variable = "defined out side function"
+stat = Random.new
+@goblin = {
+	name: "goblin",
+	strength: stat.rand(3..5),
+	intelligence: stat.rand(1..4),
+	dexterity: stat.rand(4..8),
+	vitality: stat.rand(1..3),
+	beauty: stat.rand(1..2),
+	gold: stat.rand(1..3),
+	xp_value: 10,
+	weapon: "short sword"
+	}
 
-def tester_function
-	puts @test_variable
-	test_variable = @test_variable
-	test_variable = "new value"
-	puts "reassigned #{test_variable}"
-
-	puts "not re-assigned @ #{@test_variable}"
-end
-
-puts tester_function()
-puts "This is @test_variable #{@test_variable}"
-
+	puts @goblin

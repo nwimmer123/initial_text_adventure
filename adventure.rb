@@ -97,7 +97,7 @@ def death
 end
 
 def monster_death?(monster, enemy_adjective)
-	if monster[:vitality] < 0
+	if monster[:vitality] < 1
 		puts "With a shiver, the #{@enemy_adjective.sample} #{monster[:name]} collapses in a heap."
 		return monster_death(monster, $stats, @enemy_adjective)
 	else
@@ -116,23 +116,20 @@ end
 
 
 def attack(monster, character, enemy_adjective, melee_body_part, luck)
-	puts "player #{$stats}"
-	puts "golin #{monster}"
+	puts "player vitality#{$stats[:vitality]}"
+	puts "golin stats #{monster}"
 	enemy_adjective = @enemy_adjective.sample
 	puts "The #{enemy_adjective} #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
 	puts ""
 	@luck = Random.new
-	@luck = @luck.rand(1..10)
-	puts "player @luck #{@luck}"
+	luck = @luck.rand(1..10)
+	puts "player luck #{luck}"
 	injury = melee_body_part.sample
-	if (monster[:dexterity] > character[:dexterity] && @luck < 8)
+	if (monster[:dexterity] > character[:dexterity] && luck < 8)
 		puts "The #{enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your #{injury}."
 		puts ""
-		damage = character[:vitality] - monster[:strength]
-		if damage < 0
-			damage = 0
-		end
-		character[:vitality] -= damage
+		character[:vitality] = character[:vitality] - monster[:strength]
+		puts "player vitality#{$stats[:vitality]}"
 		puts $stats
 		if death_check
 			puts "You place a hand to your #{injury}, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
@@ -142,14 +139,15 @@ def attack(monster, character, enemy_adjective, melee_body_part, luck)
 		puts "As the #{enemy_adjective} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{melee_body_part.sample}."
 		puts ""
 		monster[:vitality] = monster[:vitality] - character[:strength]
+		puts "monster vitality #{monster[:vitality]}"
 		monster_death?(monster, @enemy_adjective)
 	end
 	puts "monster #{monster[:vitality]}"
 	puts "character #{character[:vitality]}"
-	current_monster = monster
+	@current_monster = monster
 	if monster[:vitality] > 0 && character[:vitality] > 0
 
-		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
+		return combat(@current_monster, $stats, luck, enemy_adjective, melee_body_part)
 	end
 
 end
@@ -167,11 +165,7 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 	if (monster[:intelligence] > character[:intelligence] && @luck < 4)
 		puts "The #{enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} glances off your sword, grazing your #{injury}"
 		puts ""
-		damage = (character[:vitality] - (monster[:strength]/2))
-		if damage < 0
-			damage = 0
-		end
-		character[:vitality] -= damage
+		character[:vitality] = character[:vitality] - (monster[:strength]/2)
 		if death_check
 			puts "You place a hand to your #{injury}, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
 			puts ""
@@ -180,18 +174,14 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 	else
 		puts "You see an opening in the #{enemy_adjective} #{monster[:name]}'s guard and you make your move. Scoring a light blow on the #{monster[:name]}'s #{melee_body_part.sample}"
 		puts ""
-		enemy_damage = (monster[:vitality] - (character[:strength]/2))
-		if enemy_damage < 0
-			enemy_damage = 0
-		end
-		monster[:vitality] -= enemy_damage
+		monster[:vitality] = monster[:vitality] - (character[:strength]/2)
 		monster_death?(monster, @enemy_adjective)
 	end
 	puts "player #{$stats}"
 	puts "golin #{monster}"
-	current_monster = monster
+	@current_monster = monster
 	if monster[:vitality] > 0 && character[:vitality] > 0
-		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
+		return combat(@current_monster, $stats, luck, enemy_adjective, melee_body_part)
 	end
 
 end
@@ -217,8 +207,9 @@ def run_away(monster, character, luck)
 	end
 end 
 
-def combat(monster, character, luck, enemy_adjective, melee_body_part)
-	
+def combat(monster, character, luck, enemy_adjective, melee_body_part)	
+	current_monster = monster
+	puts "in combat #{monster}"
 	puts "The #{@enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes."
 	puts ""
 	puts "1) You ready your weapon for battle and attack uttering a yell as you go for an all out assault of fury, throwing caution to the wind."
@@ -229,12 +220,12 @@ def combat(monster, character, luck, enemy_adjective, melee_body_part)
 	check = "repeat"
 	while check == "repeat" do
 		if result == 1
-			return attack(monster, character, @enemy_adjective, @melee_body_part, @luck)
+			return attack(current_monster, character, @enemy_adjective, @melee_body_part, @luck)
 			
 		elsif result == 2
-			return parry(monster, character, @enemy_adjective, @melee_body_part, @luck)
+			return parry(current_monster, character, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 3
-			return run_away(monster, character, @luck)
+			return run_away(current_monster, character, @luck)
 		else 
 			puts "Please make the proper input"
 			check = "repeat"
@@ -266,7 +257,6 @@ def stat_generator
 	
 end
 
-
 def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 
 	puts "The commotion of the falling rocks seems to have alerted some goblins. You hear high pitched, excited voices echoing up the tunnel."
@@ -285,7 +275,7 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 	while check == "repeat" do
 		if result == 1
 			puts "There are two goblins charging towards you brandishing #{monster[:weapon]}'s. The tunnel is narrow though, and they can only approach you one at a time."
-			return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
+			combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 2
 			puts "It's a 2"
 			break
@@ -310,7 +300,7 @@ def no_rock_fall_torch(monster, character, enemy_adjective, melee_body_part, luc
 	puts ""
 	puts "Stats reminder #{$stats}"
 	puts ""
-	return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
+	combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 
 end
 
@@ -320,7 +310,7 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 	puts ""
 	puts "Stats reminder #{$stats}"
 	puts ""
-	return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
+	combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 
 end
 
