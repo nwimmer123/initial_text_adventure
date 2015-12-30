@@ -283,14 +283,18 @@ end
 
 pages = [
   {
-    description: "You walk into GA on your first day of WDI 25. Celso is sitting at the Front Desk.",
+    description: "What is your name brave adventurer?",
     options: [
       {
-        text: "Talk to Celso",
+        text: "",
         page_number: 1
       },
       {
-        text: "Go home",
+        text: "",
+        page_number: 2
+        },
+      {
+        text: "",
         page_number: 3
       }
     ]
