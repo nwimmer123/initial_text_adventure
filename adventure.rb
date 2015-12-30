@@ -14,9 +14,9 @@ stat = Random.new
 	weapon: "short sword"
 	}
 
-enemy_adjective =["smelly", "foul", "warty", "grotesque", "carbuncular", "shrieking", "mangy", "vile", "glum", "slimey", "repugnant", "flatulent"]
+@enemy_adjective =["smelly", "foul", "warty", "grotesque", "carbuncular", "shrieking", "mangy", "vile", "glum", "slimey", "repugnant", "flatulent"]
 
-melee_body_part =["chest", "abdomen", "arm", "thigh", "face", "gut", "ribs", "armpit", "sholder"]
+@melee_body_part =["chest", "abdomen", "arm", "thigh", "face", "gut", "ribs", "armpit", "sholder"]
 
 def level_up_check(level)
 
@@ -85,7 +85,7 @@ def death
 	check = "repeat"
 	while check == "repeat" do
 		if result == 1
-			return adventure($goblin, $stats, enemy_adjective, melee_body_part, @luck)
+			return adventure(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 2
 			return 
 		else 
@@ -98,8 +98,8 @@ end
 
 def monster_death?(monster, enemy_adjective)
 	if monster[:vitality] < 0
-		puts "With a shiver, the #{enemy_adjective.sample} #{monster[:name]} collapses in a heap."
-		return monster_death(monster, $stats, enemy_adjective)
+		puts "With a shiver, the #{@enemy_adjective.sample} #{monster[:name]} collapses in a heap."
+		return monster_death(monster, $stats, @enemy_adjective)
 	else
 		return
 	end
@@ -108,7 +108,7 @@ end
 def monster_death(monster, character, enemy_adjective)
 	character[:xp] += monster[:xp_value]
 	character[:gold] += monster[:gold]
-	puts "A quick check of the #{enemy_adjective.sample} #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
+	puts "A quick check of the #{@enemy_adjective.sample} #{monster[:name]}'s body yields #{monster[:gold]} gold pieces."
 	puts ""
 	puts "stats reminder #{$stats}"
 	level_up_check($stats[:level])
@@ -118,14 +118,15 @@ end
 def attack(monster, character, enemy_adjective, melee_body_part, luck)
 	puts "player #{$stats}"
 	puts "golin #{monster}"
-	puts "The #{enemy_adjective.sample} #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
+	enemy_adjective = @enemy_adjective.sample
+	puts "The #{enemy_adjective} #{monster[:name]} attacks! Swinging it's #{monster[:weapon]}!"
 	puts ""
-	luck = Random.new
-	luck = luck.rand(1..10)
-	puts "player luck #{luck}"
+	@luck = Random.new
+	@luck = @luck.rand(1..10)
+	puts "player @luck #{@luck}"
 	injury = melee_body_part.sample
-	if (monster[:dexterity] > character[:dexterity] && luck < 8)
-		puts "The #{enemy_adjective.sample} #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your #{injury}."
+	if (monster[:dexterity] > character[:dexterity] && @luck < 8)
+		puts "The #{enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} slips past your defense, slashing against your #{injury}."
 		puts ""
 		damage = character[:vitality] - monster[:strength]
 		if damage < 0
@@ -138,23 +139,32 @@ def attack(monster, character, enemy_adjective, melee_body_part, luck)
 			return death
 		end
 	else 
-		puts "As the #{enemy_adjective.sample} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{melee_body_part.sample}."
+		puts "As the #{enemy_adjective} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{melee_body_part.sample}."
 		puts ""
 		monster[:vitality] = monster[:vitality] - character[:strength]
-		monster_death?(monster, enemy_adjective)
+		monster_death?(monster, @enemy_adjective)
+	end
+	puts "monster #{monster[:vitality]}"
+	puts "character #{character[:vitality]}"
+	current_monster = monster
+	if monster[:vitality] > 0 && character[:vitality] > 0
+
+		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
 	end
 
 end
 
 def parry(monster, character, enemy_adjective, melee_body_part, luck)
-	enemy_adjective = enemy_adjective.sample
+	puts "player #{$stats}"
+	puts "golin #{monster}"
+	enemy_adjective = @enemy_adjective.sample
 	puts "You raise your sword, meeting the #{enemy_adjective} #{monster[:name]}'s attack with a clash of steel."
 	puts""
 
-	luck = Random.new
-	luck = luck.rand(1..10)
-	injury = melee_body_part.sample
-	if (monster[:intelligence] > character[:intelligence] && luck < 4)
+	@luck = Random.new
+	@luck = @luck.rand(1..10)
+	injury = @melee_body_part.sample
+	if (monster[:intelligence] > character[:intelligence] && @luck < 4)
 		puts "The #{enemy_adjective} #{monster[:name]}'s #{monster[:weapon]} glances off your sword, grazing your #{injury}"
 		puts ""
 		damage = (character[:vitality] - (monster[:strength]/2))
@@ -175,7 +185,13 @@ def parry(monster, character, enemy_adjective, melee_body_part, luck)
 			enemy_damage = 0
 		end
 		monster[:vitality] -= enemy_damage
-		monster_death?(monster, enemy_adjective)
+		monster_death?(monster, @enemy_adjective)
+	end
+	puts "player #{$stats}"
+	puts "golin #{monster}"
+	current_monster = monster
+	if monster[:vitality] > 0 && character[:vitality] > 0
+		return combat(current_monster, $stats, luck, enemy_adjective, melee_body_part)
 	end
 
 end
@@ -183,11 +199,11 @@ end
 def run_away(monster, character, luck)
 	puts "goblin #{monster}"
 	puts $stats
-	luck = Random.new
-	luck = luck.rand(1..10)
-	puts "luck is #{luck}"
+	@luck = Random.new
+	@luck = @luck.rand(1..10)
+	puts "@luck is #{@luck}"
 	puts "Realizing that you are hard pressed you turn and run from the #{monster[:name]}. It takes a swing and half heartedly runs after you. "
-	if ((monster[:dexterity] > character[:dexterity]) && luck < 4)
+	if ((monster[:dexterity] > character[:dexterity]) && @luck < 4)
 		damage = character[:vitality] - monster[:strength]
 		if damage < 0
 			damage = 0
@@ -202,7 +218,8 @@ def run_away(monster, character, luck)
 end 
 
 def combat(monster, character, luck, enemy_adjective, melee_body_part)
-	puts "The #{enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes."
+	
+	puts "The #{@enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes."
 	puts ""
 	puts "1) You ready your weapon for battle and attack uttering a yell as you go for an all out assault of fury, throwing caution to the wind."
  	puts "2) Best to approach this battle with care. I shall parry it's initial charge and look for an openeing in which to strike."
@@ -212,18 +229,20 @@ def combat(monster, character, luck, enemy_adjective, melee_body_part)
 	check = "repeat"
 	while check == "repeat" do
 		if result == 1
-			return attack(monster, character, enemy_adjective, melee_body_part, luck)
+			return attack(monster, character, @enemy_adjective, @melee_body_part, @luck)
 			
 		elsif result == 2
-			return parry(monster, character, enemy_adjective, melee_body_part, luck)
+			return parry(monster, character, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 3
-			return run_away(monster, character, luck)
+			return run_away(monster, character, @luck)
 		else 
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
 		end
 	end
+
+
 end
 
 def stat_generator
@@ -266,7 +285,7 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 	while check == "repeat" do
 		if result == 1
 			puts "There are two goblins charging towards you brandishing #{monster[:weapon]}'s. The tunnel is narrow though, and they can only approach you one at a time."
-			return combat
+			return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 2
 			puts "It's a 2"
 			break
@@ -291,6 +310,7 @@ def no_rock_fall_torch(monster, character, enemy_adjective, melee_body_part, luc
 	puts ""
 	puts "Stats reminder #{$stats}"
 	puts ""
+	return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 
 end
 
@@ -300,6 +320,7 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 	puts ""
 	puts "Stats reminder #{$stats}"
 	puts ""
+	return combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 
 end
 
@@ -347,6 +368,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 
 	while check == "repeat"		
 		if result == 1
+			combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
 			return death
 				
@@ -363,9 +385,9 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 			elsif $stats[:dexterity] > 2
 				puts "As you try to sneak into the gloomy cave, you step on a stick. It snaps and the goblin spins and takes a shot at you while hollering an alarm."
 				puts ""
-					luck = Random.new
-					luck = luck.rand(1..10)
-					if luck > 5
+					@luck = Random.new
+					@luck = @luck.rand(1..10)
+					if @luck > 5
 						$stats[:gold] += 1
 						$stats[:xp] += 10
 						$stats[:inventory] << "iron key"
@@ -397,18 +419,18 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 			end
 
 		elsif result == 3
-			luck = Random.new
-			luck = luck.rand(1..10)
+			@luck = Random.new
+			@luck = @luck.rand(1..10)
 			puts "With a roar you plunge headlong into the darkness, you hear the scretches of goblins in front of you. Prepare for battle!"
 			puts ""
-			if ($stats[:dexterity] > 6 && $stats[:strength] > 5) || (luck > 3)
+			if ($stats[:dexterity] > 6 && $stats[:strength] > 5) || (@luck > 3)
 				$stats[:gold] += 1
 				$stats[:xp] += 10
 				$stats[:inventory] << "iron key"
 				puts "You see a goblin in the gloom readying bow and arrow. You run up to him and ram your sword into his throat. Afer looting his body you find a gold piece and an iron key."
 				puts ""
 				break
-			elsif luck > 0
+			elsif @luck > 0
 				puts "An arrow thunks into your thigh and a searing pain shoots through your body." 
 				puts ""
 
@@ -444,12 +466,12 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 	check = "repeat"
 	while check == "repeat" do
 		if result == 1
-			luck = Random.new
-			luck = luck.rand(1..10)
-			if luck > 8
+			@luck = Random.new
+			@luck = @luck.rand(1..10)
+			if @luck > 8
 				puts "You return to the tavern with #{$stats[:gold]} gold pieces, vastly exagerrated tales of your martial prowess and proced to have the best Diamondback run in histroy. You emerge as the wealthiest person around!!"
 				return death
-			elsif luck > 3
+			elsif @luck > 3
 				puts "You return to town, and proced to lose your gold in about 10 minutes. Back to square one"
 				return death
 			end
@@ -475,27 +497,27 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 		if result == 1
 			puts "Your torch flares to light."
 			puts ""
-			luck = Random.new
-			luck = luck.rand(1..10)
-			if luck > 3 && $stats[:intelligence] > 6
+			@luck = Random.new
+			@luck = @luck.rand(1..10)
+			if @luck > 3 && $stats[:intelligence] > 6
 				$stats[:xp] += 5
 				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel."
 				puts ""
 				puts no_rock_fall_torch
 				puts ""
-				return no_rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
-			elsif luck > 7
+				return no_rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
+			elsif @luck > 7
 				$stats[:xp] += 5
 				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel."
 				puts ""
 				puts no_rock_fall_torch
 				puts ""
-				return no_rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+				return no_rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			elsif $stats[:dexterity] > 7
 				$stats[:xp] += 5
 				puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed."
 				puts ""
-				return rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+				return rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			else
 				$stats[:vitality] -= 2
 				if death_check
@@ -505,29 +527,29 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 				else
 					puts "The rocks crash over you, battering you mercilessly, but you manage to cover your head and sholder through. Ouuch"
 					puts ""
-					return rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+					return rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 				end
 			$stats[:xp] += 5
 			puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed."
 			puts ""
-			return rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+			return rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			end
 
 		elsif result == 2
 			puts "You feel your way into the tunnel. You can dimly make out the way."
 			puts""
-			luck = Random.new
-			luck = luck.rand(1..10)
-			if luck > 6 && $stats[:intelligence] > 6
+			@luck = Random.new
+			@luck = @luck.rand(1..10)
+			if @luck > 6 && $stats[:intelligence] > 6
 				$stats[:xp] += 5
 				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel."
 				puts ""
-				return no_rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+				return no_rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			elsif $stats[:dexterity] > 7
 				$stats[:xp] += 5
 				puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed."
 				puts ""
-				return rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+				return rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			else
 				$stats[:vitality] -= 2
 				if death_check
@@ -537,12 +559,12 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 				else
 					puts "The rocks crash over you, battering you mercilessly, but you manage to cover your head and sholder through. Ouuch"
 					puts ""
-					return rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+					return rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 				end
 			$stats[:xp] += 5
 			puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed."
 			puts ""
-			return rock_fall($goblin, $stats, enemy_adjective, melee_body_part, luck)
+			return rock_fall(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			end
 			
 		else 
@@ -554,7 +576,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 
 end
 
-puts adventure($goblin, $stats, enemy_adjective, melee_body_part, luck)
+puts adventure(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 
 
 
@@ -565,10 +587,10 @@ puts adventure($goblin, $stats, enemy_adjective, melee_body_part, luck)
 # end
 # 
 
-# luck check
-# luck = Random.new
-# luck = luck.rand(1..10)
-# if luck > 5
+# @luck check
+# @luck = Random.new
+# @luck = @luck.rand(1..10)
+# if @luck > 5
 
 #general structure of choices
 #result = gets.to_i
