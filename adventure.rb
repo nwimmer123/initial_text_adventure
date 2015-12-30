@@ -14,6 +14,23 @@ stat = Random.new
 	weapon: "short sword"
 	}
 
+def goblin_generator
+	
+	stat = Random.new
+	@goblin = {
+	name: "goblin",
+	strength: stat.rand(3..5),
+	intelligence: stat.rand(1..4),
+	dexterity: stat.rand(4..8),
+	vitality: stat.rand(1..3),
+	beauty: stat.rand(1..2),
+	gold: stat.rand(1..3),
+	xp_value: 10,
+	weapon: "short sword"
+	}
+	
+end
+
 @enemy_adjective =["smelly", "foul", "warty", "grotesque", "carbuncular", "shrieking", "mangy", "vile", "glum", "slimey", "repugnant", "flatulent"]
 
 @melee_body_part =["chest", "abdomen", "arm", "thigh", "face", "gut", "ribs", "armpit", "sholder"]
@@ -358,6 +375,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 
 	while check == "repeat"		
 		if result == 1
+			goblin_generator
 			combat(@goblin, $stats, @enemy_adjective, @melee_body_part, @luck)
 			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
 			return death
