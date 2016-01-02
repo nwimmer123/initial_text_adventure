@@ -315,19 +315,13 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 			goblin_generator
 			combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			puts "You wipe the black blood from your blade and advance down the tunnel"
-			two_goblins_defeated
+			return two_goblins_defeated
 		elsif result == 2
 			@luck = Random.new
 			luck = @luck.rand(1..10)
 			ambush_prep = "You spy a perfect nook above the exit of the tunnel, and scramble up to it, drawing your throwing knives.\n\nAs the first goblin exits out of the tunnel, you hurl your dagger into it's head. It collapses in a thud. The second goblin spies you and leaps up to your position. #{@stats[:xp] += 10}"
 			ambush_succesful = "You check the body of the first goblin you killed and find 2 gold pieces. #{@stats[:gold] += 2}You wipe the black blood from your blade and advance down the tunnel\n\n"
-			if luck > 6
-				puts ambush_prep
-				goblin_generator
-				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-				puts ambush_succesful
-				return two_goblins_defeated
-			elsif (luck > 4 && @stats[:intelligence] > 5)
+			if ((luck > 6) || (luck > 4 && @stats[:intelligence] > 5))
 				puts ambush_prep
 				goblin_generator
 				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
@@ -335,13 +329,7 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 				return two_goblins_defeated
 			else
 				puts "You look around, but can't find any good ambush points. A harsh goblin voice cries out. You turn to face them, moving into the tunnel so that you only have to face them one at a time."
-				goblin_generator
-				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-				puts "After dispatching the first goblin, you advance on the second goblin, he hesitates for  moment and then attacks!"
-				goblin_generator
-				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-				puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
-				return two_goblins_defeated
+				result = 1
 			end
 		elsif result == 3
 			puts "You hightail it back to the tavern. You've had enough adventure for the day.\n\n"
@@ -351,14 +339,10 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 			success = "The goblins walk right over you. Muttering to each other in their harsh language. They survey the rock fall and proced farther down the tunnel back towards the entrance.\n\n"
 			@luck = Random.new
 			luck = @luck.rand(1..10)
-			if luck > 6
+			if (luck > 6 || (luck > 3 && @stats[:intelligence] > 4))
 				puts success
 				@stats[:xp] += 10
 				return two_goblins_defeated	
-			elsif (luck > 3 && @stats[:intelligence] > 4)
-				puts success
-				@stats[:xp] += 10
-				return two_goblins_defeated
 			else
 				puts "Alas, as the goblins make their way over the rock fall, their weight on the pile makes the whole pile shift. With great alarm you realize that your hiding spot is collapsing, but your wedged in to tightly to get out with the speed required. With a groan, the pile collapses on you, After minutes of aginizing pain, the rocks crush you, setteling on your chest and amking it impossible to breathe. You slowly suffocate.\n\n"
 				return death
@@ -393,20 +377,8 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 		elsif result == 2
 			puts "You move quietly down the tunnel, ducking from shadow to shadow, making sure to only move when their backs are turned."
 			success = "You slide quietly up behind the closest goblin and you stab it in the back. It gives a cry and drops to the floor. Te other goblin spins, snarls and raises her weapon."
-			if (luck > 3 && character[:dexterity] > 7)
+			if ((luck > 3 && character[:dexterity] > 7) || (luck > 6 && character[:dexterity] > 5) || luck > 8) 
 			 	puts success
-			 	goblin_generator
-				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-				puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
-				return two_goblins_defeated
-			elsif (luck > 6 && character[:dexterity] > 5)
-				puts success
-			 	goblin_generator
-				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-				puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
-				return two_goblins_defeated
-			elsif luck > 8 
-				puts success
 			 	goblin_generator
 				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 				puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
@@ -433,24 +405,12 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 		elsif result == 4
 			puts "You walk down the tunnel after relighting your torch and call out, \"You there! I am #{@player_name}, the gretest name this side of Earogoth! I come to make a lucrative trade with your chief. Take me to him!\"\n\n"	
 			success = "The goblins, look at each other, and wisper back and forth between one another for a moment and then look at you cautiously. They say \"we shall do as you say, for now.\"\n\n"
-				if (luck > 4 && @stats[:intelligence] > 5 && @stats[:beauty] > 7)
-					puts success
-					return merchant_goblins
-				elsif (luck > 6 && @stats[:beauty] > 8)
-					puts success
-					return merchant_goblins
-				elsif luck > 8
+				if ((luck > 4 && @stats[:intelligence] > 5 && @stats[:beauty] > 7) || (luck > 6 && @stats[:beauty] > 8) || luck > 8 )
 					puts success
 					return merchant_goblins
 				else
 					puts "The goblins mutter quietly between themselves for a moment and then turn raise their swords and charge."
-					goblin_generator
-					combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-					puts "After dispatching the first goblin, you advance on the second goblin, he hesitates for  moment and then attacks!"
-					goblin_generator
-					combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-					puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
-					return two_goblins_defeated
+					result = 1
 				end
 		else 
 			puts "Please make the proper input"
@@ -458,9 +418,6 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 			result = gets.to_i
 		end
 	end
-	goblin_generator
-	combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-
 end
 
 def adventure(monster, character, enemy_adjective, melee_body_part, luck)
