@@ -585,7 +585,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 	result = gets.to_i
 	check = "repeat"
 	while check == "repeat" do
-		no_rock_fall_torch = "As you approch the end of the tunnel, you hear sounds ahead. You snub out your torch, wait for your eyes to readjust.\n\n"
+		success = "As you approch the end of the tunnel, you hear sounds ahead. You snub out your torch, wait for your eyes to readjust.\n\n"
 		if result == 1
 			puts "Your torch flares to light.\n\n"
 			
@@ -594,12 +594,12 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 			if luck > 3 && @stats[:intelligence] > 6
 				@stats[:xp] += 5
 				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel.\n\n"
-				puts no_rock_fall_torch
+				puts success
 				return no_rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			elsif luck > 7
 				@stats[:xp] += 5
 				puts "You notice a rock trap in the ceiling, a tripwire connected to rocks in the ceiling.You gingerly step over the string and continue down the tunnel.\n\n"
-				puts no_rock_fall_torch
+				puts success
 				return no_rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			elsif @stats[:dexterity] > 7
 				@stats[:xp] += 5
