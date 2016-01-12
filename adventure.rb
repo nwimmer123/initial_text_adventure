@@ -597,19 +597,19 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 				return no_rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			elsif @stats[:dexterity] > 7
 				@stats[:xp] += 5
-				puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
+				puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
 				return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			else
 				@stats[:vitality] -= 2
 				if death_check
-					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head.\n\n"
+					puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head.\n\n"
 					return death
 				else
-					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! The rocks crash over you, battering you mercilessly, but you manage to cover your head and shoulder through. Ouuch\n\n"
+					puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! The rocks crash over you, battering you mercilessly, but you manage to cover your head and shoulder through. Ouuch\n\n"
 					return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 				end
 			@stats[:xp] += 5
-			puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
+			puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
 			return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			end
 
@@ -623,19 +623,19 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 				return no_rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			elsif @stats[:dexterity] > 7
 				@stats[:xp] += 5
-				puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
+				puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
 				return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			else
 				@stats[:vitality] -= 2
 				if death_check
-					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head.\n\n"
+					puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head.\n\n"
 					return death
 				else
 					puts "The rocks crash over you, battering you mercilessly, but you manage to cover your head and shoulder through. Ouuch\n\n"
 					return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 				end
 			@stats[:xp] += 5
-			puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
+			puts "As you walk down the tunnel, you trip on a rope and you hear a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
 			return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			end
 
