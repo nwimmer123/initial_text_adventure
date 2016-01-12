@@ -1,10 +1,10 @@
-#array's to be used throughout 
+#array's to be used throughout
 
 @luck = [1,2,3,4,5,6,7,8,9,10]
 
 @enemy_adjective =["smelly", "foul", "warty", "grotesque", "carbuncular", "shrieking", "mangy", "vile", "glum", "slimey", "repugnant", "flatulent"]
 
-@melee_body_part =["chest", "abdomen", "arm", "thigh", "face", "gut", "ribs", "armpit", "sholder"]
+@melee_body_part =["chest", "abdomen", "arm", "thigh", "face", "gut", "ribs", "armpit", "shoulder"]
 
 	#########################
 	#                       #
@@ -14,7 +14,7 @@
 	#########################
 
 def goblin_generator
-	
+
 	stat = Random.new
 	@goblin = {
 	name: "goblin",
@@ -31,7 +31,7 @@ def goblin_generator
 end
 
 def stat_generator
-	
+
 	stat = Random.new
 	@stats = {
 	strength: stat.rand(1..10),
@@ -48,9 +48,9 @@ def stat_generator
 	puts "Please review your stats. 10 is the max."
 	puts ""
 	puts @stats
-	
+
 end
-	
+
 	#################
 	#               #
 	# CONTROL LOGIC #
@@ -99,7 +99,7 @@ def level_up
 
 	end
 	puts "Here are your new stats! #{@stats}"
-	return		
+	return
 end
 
 def death_check
@@ -120,8 +120,8 @@ def death
 		if result == 1
 			return adventure(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 2
-			return 
-		else 
+			return
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -161,7 +161,7 @@ def attack(monster, character, enemy_adjective, melee_body_part, luck)
 			puts "You place a hand to your #{injury}, and see blood welling up. As you see your life flee from you, a sense of panic overcomes you. As you drop to a knee overcome by weakness you feel blades slicing into your body and then you know no more."
 			return death
 		end
-	else 
+	else
 		puts "As the #{enemy_adjective} #{monster[:name]} attacks, you slip your sword in past its guard slicing it in the #{melee_body_part.sample}.\n\n"
 		monster[:vitality] = monster[:vitality] - character[:strength]
 		monster_death?(monster, @enemy_adjective)
@@ -210,9 +210,9 @@ def run_away(monster, character, luck)
 			return death
 		end
 	end
-end 
+end
 
-def combat(monster, character, luck, enemy_adjective, melee_body_part)	
+def combat(monster, character, luck, enemy_adjective, melee_body_part)
 	current_monster = monster
 	puts "The #{@enemy_adjective.sample} #{monster[:name]} approaches with its #{monster[:weapon]} drawn. Murder in its eyes.\n\n"
 	puts "1) You ready your weapon for battle and attack uttering a yell as you go for an all out assault of fury, throwing caution to the wind."
@@ -228,7 +228,7 @@ def combat(monster, character, luck, enemy_adjective, melee_body_part)
 			return parry(current_monster, character, @enemy_adjective, @melee_body_part, @luck)
 		elsif result == 3
 			return run_away(current_monster, character, @luck)
-		else 
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -267,7 +267,7 @@ def torch?
 			return true
 		elsif result == 2
 			return false
-		else 
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -282,11 +282,11 @@ def two_goblins_defeated(monster, character, enemy_adjective, melee_body_part, l
 	luck = @luck.rand(1..10)
 	if (torch? && luck > 6) || (torch? && @stats[:intelligence] > 5) || (luck > 8) || (luck > 5 && @stats[:intelligence] > 6) || (@stats[:dexterity] > 8 && luck > 4)
 		puts "As you continue down the tunnel, your keen eye notices, that the rocks ahead of you are different. You bend down to examine them and discover a pit trap. You carefully edge your way around it."
-	else 
+	else
 		puts "You continue down the tunnel. All of a sudden the ground gives way beneath your feet. You plummet down into a pit filled with fire hardened wooden stakes."
 		@stats[:vitality] -= 5
 		@stats[:dexterity] -= 3
-		if death_check 
+		if death_check
 			puts "You gasp in agony, stakes impaling you all over your body. You can not even move, as you slowly slide down the stakes. The end comes slowly, to slowly."
 			return death
 		end
@@ -321,7 +321,7 @@ def not_charmed_goblins
 			combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
 			return two_goblins_defeated
-		else 
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -338,7 +338,7 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 	puts "2) You look around to see if you can find a decent ambush point."
 	puts "3) Yeesh, they sound pissed. It's time to scramble over those rocks and get out of here!"
 	puts "4) There appears to be a little hollow in those fallen rocks, I'm going to try to squeeze in there and hide."
-	
+
 	result = gets.to_i
 	puts ""
 
@@ -384,7 +384,7 @@ def rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 				puts "Alas, as the goblins make their way over the rock fall, their weight on the pile makes the whole pile shift. With great alarm you realize that your hiding spot is collapsing, but your wedged in to tightly to get out with the speed required. With a groan, the pile collapses on you, After minutes of aginizing pain, the rocks crush you, setteling on your chest and amking it impossible to breathe. You slowly suffocate.\n\n"
 				return death
 			end
-		else 
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -414,7 +414,7 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 		elsif result == 2
 			puts "You move quietly down the tunnel, ducking from shadow to shadow, making sure to only move when their backs are turned."
 			success = "You slide quietly up behind the closest goblin and you stab it in the back. It gives a cry and drops to the floor. Te other goblin spins, snarls and raises her weapon."
-			if ((luck > 3 && character[:dexterity] > 7) || (luck > 6 && character[:dexterity] > 5) || luck > 8) 
+			if ((luck > 3 && character[:dexterity] > 7) || (luck > 6 && character[:dexterity] > 5) || luck > 8)
 			 	puts success
 			 	goblin_generator
 				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
@@ -429,7 +429,7 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 				combat(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 				puts "You wipe the black blood from your blade and advance down the tunnel\n\n"
 				return two_goblins_defeated(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-			end	
+			end
 		elsif result == 3
 			puts "You throw back your cloak, revealing your beautiful face, and strut down the tunnel. Calling out, \"It is I! #{@player_name}, you are truely lucky to be allowed in my presence, you little darlings. Come closer so that you may bask before me.\"\n\n"
 				if (luck > 5 && @stats[:beauty] > 8)
@@ -438,9 +438,9 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 				else
 					puts "The goblins, stare at you and then break into fits of laughter. After a brief bout they declare in poorly spoken human, \"You are very funny human. We have not had such a laugh in many days. For that, we will not kill you. If you leave now, we will spare your miserable life.\" Then the mirth leaves their eyes to be replaced by hostility. \"Leave now, or you die! Humans are always killing us, and we will return the favor\"\n\n"
 					 return not_charmed_goblins(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
-				end 
+				end
 		elsif result == 4
-			puts "You walk down the tunnel after relighting your torch and call out, \"You there! I am #{@player_name}, the gretest name this side of Earogoth! I come to make a lucrative trade with your chief. Take me to him!\"\n\n"	
+			puts "You walk down the tunnel after relighting your torch and call out, \"You there! I am #{@player_name}, the gretest name this side of Earogoth! I come to make a lucrative trade with your chief. Take me to him!\"\n\n"
 			success = "The goblins, look at each other, and wisper back and forth between one another for a moment and then look at you cautiously. They say \"we shall do as you say, for now.\"\n\n"
 				if ((luck > 4 && @stats[:intelligence] > 5 && @stats[:beauty] > 7) || (luck > 6 && @stats[:beauty] > 8) || luck > 8 )
 					puts success
@@ -449,7 +449,7 @@ def no_rock_fall(monster, character, enemy_adjective, melee_body_part, luck)
 					puts "The goblins mutter quietly between themselves for a moment and then turn raise their swords and charge."
 					result = 1
 				end
-		else 
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -465,7 +465,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 	puts stat_generator
 
 	result = 2
-	while result == 2 
+	while result == 2
 		puts "Here is your first game choice. Enter just the number to the left of the choice to make your selection.\n\nIf you would like to keep your character,\n\n1) Yes, I would like to keep my amazing stats!\n2) No, this character is the worst, make me a new one!\n\n"
 		result = gets.to_i
 		if result == 1
@@ -479,15 +479,15 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 	end
 
 	puts "You've heard that there is a cave nearby filled with weak little gobins who have been terrorizing the local peasants who are even weaker and punier. Sadly, you lost a lot of coin playing Diamondback the other night and you really need to refill your personal cofers, and you're still pissed about your loss, so nothing quite like doing some ultra-violence on some puny goblins to make you feel better about your self.\n\nAs you approach the entrance to the dank cave, a cold, foul wind wafts out. A chill goes through your bones and a sense of grand foreboding fills your soul.\n\n1) This is a direct sign from the all mighty Thormidal!! It is a sign that I should return to the village and renounce my sinfull ways!\n2) Hmmm, this sense of forebodeing makes me nervous, I shall enter as silently as I can...\n3) Paaah, this is naught but foolishness, I shall let forth a great war cry so all may know my rath. #{@player_name} fears nothing!!!"
-	
+
 	result = gets.to_i
 	check = "repeat"
 
-	while check == "repeat"		
+	while check == "repeat"
 		if result == 1
 			puts "You return to the village, feeling a little foolish. What made you filled with such bloodthristy greed in the first place? Perhaps it was the curse of Udenas. Well, at least the spell has passed by and the peace of Thormidal has filled you once again.  Some meditation in the gardens of peace is needed."
 			return death
-				
+
 		elsif result == 2
 			puts "You sneak quietly into the gloom of the cave.\n\n"
 			if @stats[:dexterity] > 5
@@ -505,12 +505,12 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 						@stats[:xp] += 10
 						@stats[:inventory] << "iron key"
 						puts "The arrow wizzes over your head. As the goblin grabs another arrow, he fumbles it in his fear, giving you time enough to thrust your knife into its belly.  He gives a cry and blood gurgles up between his lips as he dies. You feel through its pockets and find 1 gold piece and an iron key.\n\n"
-						break	
-					else 
+						break
+					else
 						puts "The arrow thunks into your thigh and a searing pain shoots through your body.\n\n"
 						@stats[:vitality] -= 2
 						@stats[:dexterity] -= 1
-						if death_check 
+						if death_check
 							puts "You colapse to the ground holding your leg. The goblin walks over, knife in hand and a leer on its face. He laughs as he opens your throat and you feel no more ..."
 							return death
 						else
@@ -539,7 +539,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 			elsif luck > 0
 				@stats[:dexterity] -= 1
 				@stats[:vitality] -= 2
-				puts "An arrow thunks into your thigh and a searing pain shoots through your body.\n\n" 
+				puts "An arrow thunks into your thigh and a searing pain shoots through your body.\n\n"
 					if death_check
 						puts "You colapse to the ground holding your leg. A goblin walks over, knife in hand and a leer on its face. He laughs as he opens your throat and you feel no more ..."
 						return death
@@ -568,7 +568,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 		elsif result == 2
 			puts "You travel down into the dark tunnel. At least you have a torch."
 			break
-		else 
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -582,7 +582,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 		success = "As you approch the end of the tunnel, you hear sounds ahead. You snub out your torch, wait for your eyes to readjust.\n\n"
 		if result == 1
 			puts "Your torch flares to light.\n\n"
-			
+
 			@luck = Random.new
 			luck = @luck.rand(1..10)
 			if luck > 3 && @stats[:intelligence] > 6
@@ -605,7 +605,7 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head.\n\n"
 					return death
 				else
-					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! The rocks crash over you, battering you mercilessly, but you manage to cover your head and sholder through. Ouuch\n\n"
+					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! The rocks crash over you, battering you mercilessly, but you manage to cover your head and shoulder through. Ouuch\n\n"
 					return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 				end
 			@stats[:xp] += 5
@@ -631,15 +631,15 @@ def adventure(monster, character, enemy_adjective, melee_body_part, luck)
 					puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! Rocks tumble down upon you in a thunderous roar. You try to run, but a large rock caves in your head.\n\n"
 					return death
 				else
-					puts "The rocks crash over you, battering you mercilessly, but you manage to cover your head and sholder through. Ouuch\n\n"
+					puts "The rocks crash over you, battering you mercilessly, but you manage to cover your head and shoulder through. Ouuch\n\n"
 					return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 				end
 			@stats[:xp] += 5
 			puts "As you walk down the tunnel, you trip on a rope and you hear a a stick snap above you. A trap! You dive forward and tuck in to a roll. Rocks crash behind you, leaving you covered in a layer of dust, but otherwise unharmed.\n\n"
 			return rock_fall(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 			end
-			
-		else 
+
+		else
 			puts "Please make the proper input"
 			check = "repeat"
 			result = gets.to_i
@@ -652,12 +652,12 @@ puts adventure(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 
 
 
-#death check? inquire if user wants to play a new game sequence	
-# if death_check 
+#death check? inquire if user wants to play a new game sequence
+# if death_check
 # 	puts Specific Death Sequence
 # 	return death
 # end
-# 
+#
 
 # @luck check
 # @luck = Random.new
@@ -674,10 +674,9 @@ puts adventure(@goblin, @stats, @enemy_adjective, @melee_body_part, @luck)
 # 		puts "It's a 2"
 # 	elsif result == 3
 # 		puts "It's a three"
-# 	else 
+# 	else
 # 		puts "Please make the proper input"
 # 		check = "repeat"
 # 		result = gets.to_i
 # 	end
 # end
-
